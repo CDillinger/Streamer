@@ -51,8 +51,15 @@ function ytPlayerShow(source)
 
 function setChannel(chNum)
 {
+	$.doTimeout("#channel-text"); // cancel channel number fadeout
+	$("#channel-text").stop(true, true).fadeTo(0, 1).show(); // reshow channel number
 	load(chNum);
 	$('body').data('chNum', chNum);
+	
+	var channels = $('body').data('channels');
+	var ch = channels[chNum];
+	$('#channel-text').html(chNum + ' - ' + ch.name);
+	$.doTimeout("#channel-text", 3000, function(){ $("#channel-text").fadeOut(500); }); // fade channel number out after 3 seconds
 }
 
 function channelUp()
@@ -89,7 +96,7 @@ function load(chNum)
 			loadYTChannel(ch.channel);
 			break;
 		case 'yt-video':
-			loadYTChannel(ch.video);
+			loadYTVideo(ch.video);
 			break;
 	}
 	
@@ -149,4 +156,6 @@ $(document).ready(function()
 	setInterval(function(){ window.focus(); }, 200);
 	
 	setChannel(0);
+	
+	$('body').flowtype({ fontRatio: 60 });
 });
