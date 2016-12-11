@@ -18,8 +18,21 @@ function loadYTVideo(video)
 
 function streamPlayerHide()
 {
-	var element = document.getElementById('stream-source'); 
-	element.setAttribute('src', ''); // remove source (get rid of audio)
+	//var element = document.getElementById('stream-source'); 
+	//element.setAttribute('src', ''); // remove source (get rid of audio)
+	if(Hls.isSupported())
+	{
+		var video = document.getElementById('stream-player');
+		var hls = new Hls();
+		hls.attachMedia(video);
+		hls.on(Hls.Events.MANIFEST_PARSED,function()
+		{
+			video.load();
+			video.pause();
+		});
+	}
+	
+	
 	var vid = document.getElementById('stream-player'); 
 	vid.style.display = 'none';
 	vid.load();
@@ -28,11 +41,23 @@ function streamPlayerHide()
 
 function streamPlayerShow(source)
 {
-	$('#stream-source').attr('src', source);
+	if(Hls.isSupported())
+	{
+		var video = document.getElementById('stream-player');
+		var hls = new Hls();
+		hls.loadSource(source);
+		hls.attachMedia(video);
+		hls.on(Hls.Events.MANIFEST_PARSED,function()
+		{
+			video.play();
+		});
+	}
+
+	//$('#stream-source').attr('src', source);
 	var vid = document.getElementById('stream-player'); 
 	vid.style.display = '';
-	vid.pause();
-	vid.load(); //reload
+	// vid.pause();
+	// vid.load(); //reload
 }
 
 function ytPlayerHide()
