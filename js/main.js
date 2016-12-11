@@ -18,8 +18,6 @@ function loadYTVideo(video)
 
 function streamPlayerHide()
 {
-	//var element = document.getElementById('stream-source'); 
-	//element.setAttribute('src', ''); // remove source (get rid of audio)
 	if(Hls.isSupported())
 	{
 		var video = document.getElementById('stream-player');
@@ -53,11 +51,8 @@ function streamPlayerShow(source)
 		});
 	}
 
-	//$('#stream-source').attr('src', source);
 	var vid = document.getElementById('stream-player'); 
 	vid.style.display = '';
-	// vid.pause();
-	// vid.load(); //reload
 }
 
 function ytPlayerHide()
@@ -171,7 +166,22 @@ $(document).ready(function()
 		{name:'1HD Secondary', category:'music', type:'hls', source:'http://80.250.191.10:1935/live/hlsstream343/playlist.m3u8', site:'http://1hd.ru/video.php'},
 		{name:'Arirang Radio', category:'music', type:'hls', source:'http://amdlive.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8', site:'http://www.arirang.com/player/onair_radio.asp'},
 		{name:'Beatz HD', category:'music', type:'hls', source:'http://rtmp.infomaniak.ch/livecast/beats_1/playlist.m3u8', site:'http://www.radiopilatus.ch/livecenter/2'},
+		{name:'Capital TV', category:'music', type:'hls', source:'http://ooyalahd2-f.akamaihd.net/i/globalradio01_delivery@156521/master.m3u8', site:'http://www.capitalfm.com/tv/'},
+		{name:'Chillhop Cafe', category:'music', type:'yt-channel', channel:'UCOxqgCwgOqC2lMqC5PYz_Dg', site:'https://www.youtube.com/channel/UCOxqgCwgOqC2lMqC5PYz_Dg'},
+		// {name:'DJing', category:'music', type:'hls', source:'http://www.djing.com/tv/live.m3u8', site:'http://www.djing.com/?channel=live'},
+		// {name:'DJing Animation', category:'music', type:'hls', source:'http://www.djing.com/tv/a-05.m3u8', site:'http://www.djing.com/?channel=animation'},
+		// {name:'DJing Classic', category:'music', type:'hls', source:'http://www.djing.com/tv/i-05.m3u8', site:'http://www.djing.com/?channel=classics'},
+		// {name:'DJing Ibiza', category:'music', type:'hls', source:'http://www.djing.com/tv/d-05.m3u8', site:'http://www.djing.com/?channel=ibiza'},
+		// {name:'DJing Underground', category:'music', type:'hls', source:'http://www.djing.com/tv/u-05.m3u8', site:'http://www.djing.com/?channel=underground'},
+		// {name:'Dot Dance', category:'music', type:'hls', source:'http://live.dotdance.cdnvideo.ru/dotdance/dotdance.sdp/chunklist.m3u8', site:'http://dotdance.tv/'},
+		{name:'The Grand Sound', category:'music', type:'yt-channel', channel:'UC14ap4T608Zz_Mz4eezhIqw', site:'https://www.youtube.com/channel/UC14ap4T608Zz_Mz4eezhIqw'},
+		{name:'Heart TV', category:'music', type:'hls', source:'http://ooyalahd2-f.akamaihd.net/i/globalradio02_delivery@156522/master.m3u8', site:'http://www.heart.co.uk/tv/player/'},
 		{name:'Kronehit TV', category:'music', type:'hls', source:'http://bitcdn-kronehit-live.bitmovin.com/hls/1500k/bitcodin.m3u8', site:'http://www.kronehit.at/alles-ueber-kronehit/tv/'},
+		{name:'Magical Music Radio', category:'music', type:'yt-channel', channel:'UCwPomyIUWBsysfwuEfMx_3A', site:'https://www.youtube.com/channel/UCwPomyIUWBsysfwuEfMx_3A'},
+		{name:'Monstercat FM', category:'music', type:'yt-channel', channel:'UCJ6td3C9QlPO9O_J5dF4ZzA', site:'http://live.monstercat.com/'},
+		{name:'PowerTurk TV', category:'music', type:'hls', source:'http://powertv.cdnturk.com/powertv/powerturktv.smil/playlist.m3u8', site:'http://www.powerapp.com.tr/tv/powerTurkTV'},
+		{name:'RadioU TV', category:'music', type:'hls', source:'http://cdn.rbm.tv/rightbrainmedia-live-109/_definst_/smil:radioutv_all.smil/playlist.m3u8', site:'http://radiou.com/tv/'},
+		{name:'Silk Radio', category:'music', type:'yt-channel', channel:'UCX4sShAQf01LYjYQhG2ZgKg', site:'https://www.youtube.com/channel/UCX4sShAQf01LYjYQhG2ZgKg'},
 	];
 	
 	$('body').data('channels', channels);
