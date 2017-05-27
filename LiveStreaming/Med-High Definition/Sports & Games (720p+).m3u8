@@ -1,0 +1,13 @@
+#EXTM3U
+
+#EXTINF:-1,NBC Golf
+http://tvegolf-i.akamaihd.net/hls/live/218225/golfx/4296k/prog.m3u8
+
+#EXTINF:-1,NFL Now
+http://nflioslivesvg2-i.akamaihd.net/hls/live/221521/nflioslive/2015HackerNow_w99d9_g.m3u8
+
+#EXTINF:-1,PAC12 Network
+http://pac12hd2-lh.akamaihd.net/i/p12netw_delivery@132840/master.m3u8
+
+#EXTINF:-1,Poker Central
+http://ooyalahd2-f.akamaihd.net/i/crtv01_delivery@329705/master.m3u8

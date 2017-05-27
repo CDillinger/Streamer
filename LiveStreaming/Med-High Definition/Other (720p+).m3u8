@@ -1,0 +1,16 @@
+#EXTM3U
+
+#EXTINF:-1,NASA TV (Public)
+http://nasatv-lh.akamaihd.net/i/NASA_101@319270/master.m3u8
+
+#EXTINF:-1,NASA TV (Media)
+http://nasatv-lh.akamaihd.net/i/NASA_103@319271/master.m3u8
+
+#EXTINF:-1,NASA TV (ISS Views)
+http://iphone-streaming.ustream.tv/uhls/17074538/streams/live/playlist.m3u8
+
+#EXTINF:-1,Insight TV
+http://ooyalahd2-f.akamaihd.net/i/intv02_delivery@346464/master.m3u8
+
+#EXTINF:-1,RT Documentary
+http://rtcdn.ashttp14.visionip.tv/live/rtcdn-rtcdn-doc-hsslive-25f-16x9-HD/playlist.m3u8

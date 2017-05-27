@@ -1,0 +1,67 @@
+#EXTM3U
+
+#EXTINF:-1,1HD
+http://80.250.191.10:1935/live/hlsstream343/playlist.m3u8
+
+#EXTINF:-1,Arirang Radio
+http://amdlive.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8
+
+#EXTINF:-1,BEATZ
+http://rtmp.infomaniak.ch/livecast/beats_1/playlist.m3u8
+
+#EXTINF:-1,Capitol TV
+http://ooyalahd2-f.akamaihd.net/i/globalradio01_delivery@156521/master.m3u8
+
+#EXTINF:-1,DJing
+http://www.djing.com/tv/05.m3u8
+
+#EXTINF:-1,DJing Animation
+http://www.djing.com/tv/a-05.m3u8
+
+#EXTINF:-1,DJing Classic
+http://www.djing.com/tv/i-05.m3u8
+
+#EXTINF:-1,DJing Dancefloor/Ibiza
+http://www.djing.com/tv/d-05.m3u8
+
+#EXTINF:-1,DJing Underground
+http://www.djing.com/tv/u-05.m3u8
+
+#EXTINF:-1,Dot Dance
+http://live.dotdance.cdnvideo.ru/dotdance/dotdance.sdp/playlist.m3u8
+
+#EXTINF:-1,Electrosound
+rtmp://www.electrosound.tv:1935/public/stream
+
+#EXTINF:-1,Heart TV
+http://ooyalahd2-f.akamaihd.net/i/globalradio02_delivery@156522/master.m3u8
+
+#EXTINF:-1,One.by HD
+http://rtmp.one.by:1300
+
+#EXTINF:-1,One.by UHD
+http://rtmp.one.by:1400
+
+#EXTINF:-1,One.by Россия HD
+http://rtmp.one.by:2300
+
+#EXTINF:-1,PowerTürk TV
+http://powertv.cdnturk.com/powertv/powerturktv.smil/playlist.m3u8
+
+#EXTINF:-1,RadioU
+http://cdn.rbm.tv/rightbrainmedia-live-109/_definst_/smil:radioutv_all.smil/playlist.m3u8
+
+#EXTINF:-1,Real Hip Hop Network
+http://rhn.tulix.tv/live/Stream1/playlist.m3u8
+
+#EXTINF:-1,VEVO TV Hits
+http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8
+
+#EXTINF:-1,VEVO TV Flow
+http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch2/06/prog_index.m3u8
+
+#EXTINF:-1,VEVO TV Nashville
+http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch3/06/prog_index.m3u8
+
+#EXTINF:-1,VEVO TV Europe
+http://vevoplaylist-eu01-live.hls.adaptive.level3.net/vevoeu/ch01/06/prog_index.m3u8

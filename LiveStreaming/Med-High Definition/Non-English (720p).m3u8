@@ -1,0 +1,31 @@
+#EXTM3U
+
+#EXTINF:-1,Brodilo (Russian)
+http://brodilo.tv/channel.php
+
+#EXTINF:-1,Buy Home TV (Russian)
+http://live.buy-home.tv:1935/bhtvlive/live/playlist.m3u8
+
+#EXTINF:-1,La Sexta (Spanish)
+http://a3live-lh.akamaihd.net/i/lasexta_1@35272/master.m3u8
+
+#EXTINF:-1,Hello TV (Russian)
+http://live.tvhello.ru/live/Stream1/playlist.m3u8
+
+#EXTINF:-1,L!FE (Russian)
+http://tv.life.ru/lifetv/720p/index.m3u8
+
+#EXTINF:-1,L!FE 78 (Russian)
+http://tv78.life.ru/lifetv/720p/index.m3u8
+
+#EXTINF:-1,RT (Arabic)
+http://rtcdn.ashttp14.visionip.tv/live/rtcdn-rtcdn-arab-hsslive-25f-16x9-HD/playlist.m3u8
+
+#EXTINF:-1,RT (Spanish)
+http://rtcdn.ashttp14.visionip.tv/live/rtcdn-rtcdn-esp-hsslive-25f-16x9-HD/playlist.m3u8
+
+#EXTINF:-1,TRT1 (Turkish)
+http://trtcanlitv-lh.akamaihd.net/i/TRT1HD_1@181842/master.m3u8
+
+#EXTINF:-1,TVN (Broadcast - Chile/Spanish)
+http://tvn-vod.mdstrm.com/tvn-live/_definst_/smil:7cb6048ff45cb5cdf7f5fed828597fd1/playlist.m3u8
