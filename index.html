@@ -1,20 +1,16 @@
 <html>
 	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://www.youtube.com/iframe_api"></script>
+		<script type="text/javascript" src="bitmovin/bitmovinplayer.js"></script>
 		<script src="js/jquery.ba-dotimeout.js"></script>
 		<script src="js/flowtype.js"></script>
-		<script src="js/main.js"></script>
-		<script src="https://cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
 	</head>
 	<body>
-		<div class="video-container" id="video-container">
-			<div id="youtube-player"></div>
-			<video id="stream-player" style="display: none;" controls autoplay></video>
-		</div>
+		<div id="player"></div>
 		<div class="channel-info"><h1 class="hover" id="channel-text"></h1></div>
+		<script type="text/javascript" src="js/stream.js"></script>
 	</body>
 </html>
