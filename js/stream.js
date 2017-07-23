@@ -51,6 +51,7 @@ var maxChannel = channels.length - 1;
 onload = function() {
 	player = bitmovin.player("player");
 	player.setup({
+		key: "5f4cbc75-4ee8-42de-857e-24f493a1e338",
 		playback: { autoplay: true, muted: false, },
 		cast: { enable: true }
 	}).then(function(value) {
