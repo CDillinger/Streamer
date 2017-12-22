@@ -2,8 +2,8 @@ var channels = [
 	// News
 	{ name:'Al Jazeera', category:'news', source:'http://aljazeera-eng-hd-live.hls.adaptive.level3.net/aljazeera/english2/index.m3u8', site:'http://www.aljazeera.com/live/' },
 	{ name:'CBS News', category:'news', source:'http://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/master.m3u8', site:'http://www.cbsnews.com/live/' },
-	{ name:'Press TV', category:'news', source:'http://178.32.255.199:1935/live/ptven/playlist.m3u8', site:'http://www.presstv.com/Default/Live' },
-	{ name:'NewsMax TV', category:'news', source:'http://ooyalahd2-f.akamaihd.net/i/newsmax02_delivery@119568/master.m3u8', site:'http://www.newsmaxtv.com' },
+	{ name:'Press TV', category:'news', source:'http://107.189.40.49:1935/live/ptven/playlist.m3u8', site:'http://www.presstv.com/Default/Live' },
+	{ name:'NewsMax TV', category:'news', source:'https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8', site:'http://www.newsmaxtv.com' },
 	
 	// Music
 	{ name:'1HD', category:'music', source:'https://cdn-01.bonus-tv.ru:8090/1HDmusic/tracks-v2a1/index.m3u8', site:'http://1hd.ru/video.php' },
