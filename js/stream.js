@@ -5,8 +5,8 @@ var channelStateFile = 'channels/channels.json';
 var channels = [];
 
 var player = null;
-var channelNumber = 0;
-var maxChannel = 0;
+var channelNumber = 187;
+var maxChannel = -1;
 var playInterval = null;
 
 // Channel number input
