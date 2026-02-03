@@ -32,6 +32,18 @@ class ChannelChecker:
                 'last_updated': None
             }
 
+    def has_numeric_prefix(self, name: str) -> bool:
+        """Check if a channel name has a numeric prefix."""
+        # Pattern matches: optional whitespace, digits, optional separators (. - : |), whitespace
+        pattern = r'^\s*\d+[\s\.\-:\|]+\s*'
+        return bool(re.match(pattern, name))
+
+    def strip_numeric_prefix(self, name: str) -> str:
+        """Remove numeric prefix from channel name (e.g., '1. ESPN' -> 'ESPN')."""
+        pattern = r'^\s*\d+[\s\.\-:\|]+\s*'
+        cleaned_name = re.sub(pattern, '', name)
+        return cleaned_name.strip() if cleaned_name else name
+
     def save_state(self):
         """Save current state to JSON file."""
         self.state['last_updated'] = datetime.now().isoformat()
@@ -84,6 +96,15 @@ class ChannelChecker:
                 channels.append(current_channel)
                 current_channel = None
 
+        # Check if ALL channels have numeric prefixes (indicating channel numbers)
+        if channels:
+            channels_with_prefix = sum(1 for ch in channels if self.has_numeric_prefix(ch['name']))
+            # If 100% of channels have numeric prefixes, strip them all
+            if channels_with_prefix == len(channels):
+                print(f"Detected numeric prefixes on all {len(channels)} channels - removing prefixes")
+                for channel in channels:
+                    channel['name'] = self.strip_numeric_prefix(channel['name'])
+
         return channels
 
     def channel_exists_in_state(self, url: str) -> bool:
@@ -91,7 +112,22 @@ class ChannelChecker:
         for channel in self.state['success'] + self.state['failed']:
             if channel['url'] == url:
                 return True
+            # Also check in aliases
+            if 'aliases' in channel:
+                for alias in channel['aliases']:
+                    if alias.get('url') == url:
+                        return True
         return False
+
+    def find_channel_by_name(self, name: str) -> Optional[Dict]:
+        """Find an existing channel by name in the state."""
+        for channel in self.state['success']:
+            if channel.get('name') == name:
+                return channel
+        for channel in self.state['failed']:
+            if channel.get('name') == name:
+                return channel
+        return None
 
     def extract_first_variant_url(self, m3u8_content: str, base_url: str) -> Optional[str]:
         """Extract the first stream URL from M3U8 playlist content."""
@@ -330,13 +366,40 @@ class ChannelChecker:
 
             result = self.check_channel(channel, source_playlist=source_playlist)
 
-            if result['status'] == 'success':
-                self.state['success'].append(result)
-                cors_status = "✓ CORS" if result.get('cors_enabled') else "✗ No CORS"
-                print(f"  ✓ SUCCESS - {result.get('http_status')} - {cors_status}")
+            # Check if a channel with this name already exists
+            existing_channel = self.find_channel_by_name(channel['name'])
+
+            if existing_channel:
+                # Add as alias to existing channel
+                if 'aliases' not in existing_channel:
+                    existing_channel['aliases'] = []
+
+                alias_info = {
+                    'url': result['url'],
+                    'source_playlist': result.get('source_playlist'),
+                    'checked_at': result.get('checked_at'),
+                    'status': result.get('status')
+                }
+
+                # Include additional details if this alias failed or has different characteristics
+                if result['status'] == 'failed':
+                    alias_info['reason'] = result.get('reason')
+                    alias_info['details'] = result.get('details')
+                else:
+                    alias_info['http_status'] = result.get('http_status')
+                    alias_info['cors_header'] = result.get('cors_header')
+
+                existing_channel['aliases'].append(alias_info)
+                print(f"  ⟳ DUPLICATE NAME - Added as alias to existing channel")
             else:
-                self.state['failed'].append(result)
-                print(f"  ✗ FAILED - {result['reason']}: {result.get('details', 'N/A')}")
+                # Add as new channel entry
+                if result['status'] == 'success':
+                    self.state['success'].append(result)
+                    cors_status = "✓ CORS" if result.get('cors_enabled') else "✗ No CORS"
+                    print(f"  ✓ SUCCESS - {result.get('http_status')} - {cors_status}")
+                else:
+                    self.state['failed'].append(result)
+                    print(f"  ✗ FAILED - {result['reason']}: {result.get('details', 'N/A')}")
 
             # Save state periodically (every 10 channels)
             if i % 10 == 0:
