@@ -5,6 +5,9 @@ body
 	background-color: #000;
 	font-size: 18px;
 	font-family: 'Libre Baskerville', serif;
+	overflow: hidden;
+	width: 100vw;
+	height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6, p
@@ -29,19 +32,155 @@ h1, h2, h3, h4, h5, h6, p
 	margin: none;
 }
 
+/* Video.js player styling */
+#player.video-js
+{
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.video-js video,
+.video-js .vjs-tech
+{
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: contain !important;
+}
+
 .channel-info
 {
 	position: absolute;
-	top: 2%;
-	left: 1%;
-	height: 15%;
-	width: 98%;
+	top: 0;
+	left: 0;
+	padding: 20px;
+	z-index: 1000;
 }
 
-.hover
+#channel-text
 {
-    color: white;
-    text-shadow:
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+	color: white;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	margin: 0;
+	font-size: 24px;
+}
+
+/* Show channel name when hovering near top left */
+.channel-info:hover #channel-text
+{
+	opacity: 1;
+}
+
+/* Create a larger hover area */
+.channel-info::before
+{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 300px;
+	height: 100px;
+}
+
+/* Channel Search */
+.search-container
+{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.95);
+	border: 2px solid #fff;
+	border-radius: 8px;
+	padding: 20px;
+	min-width: 500px;
+	max-width: 700px;
+	max-height: 70vh;
+	display: flex;
+	flex-direction: column;
+	z-index: 2000;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+#search-input
+{
+	width: 100%;
+	padding: 12px 15px;
+	font-size: 18px;
+	background: #222;
+	border: 1px solid #444;
+	border-radius: 4px;
+	color: #fff;
+	font-family: 'Libre Baskerville', serif;
+	outline: none;
+}
+
+#search-input:focus
+{
+	border-color: #fff;
+}
+
+#search-results
+{
+	margin-top: 15px;
+	overflow-y: auto;
+	max-height: 50vh;
+}
+
+.search-result-item
+{
+	padding: 10px 15px;
+	cursor: pointer;
+	border-radius: 4px;
+	margin-bottom: 5px;
+	color: #fff;
+	transition: background 0.2s;
+}
+
+.search-result-item:hover,
+.search-result-item.selected
+{
+	background: #333;
+}
+
+.search-result-name
+{
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 3px;
+}
+
+.search-result-category
+{
+	font-size: 12px;
+	color: #888;
+}
+
+.search-result-number
+{
+	float: right;
+	color: #666;
+	font-size: 14px;
+}
+
+.search-hint
+{
+	margin-top: 15px;
+	text-align: center;
+	color: #666;
+	font-size: 12px;
+}
+
+.no-results
+{
+	text-align: center;
+	color: #666;
+	padding: 20px;
+	font-style: italic;
 }

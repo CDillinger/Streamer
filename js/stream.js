@@ -1,79 +1,269 @@
-var channels = [
-	// News
-	{ name:'Al Jazeera', category:'news', source:'http://aljazeera-eng-hd-live.hls.adaptive.level3.net/aljazeera/english2/index.m3u8', site:'http://www.aljazeera.com/live/' },
-	{ name:'CBS News', category:'news', source:'http://cbsnewshd-lh.akamaihd.net/i/CBSNHD_7@199302/master.m3u8', site:'http://www.cbsnews.com/live/' },
-	{ name:'Press TV', category:'news', source:'http://107.189.40.49:1935/live/ptven/playlist.m3u8', site:'http://www.presstv.com/Default/Live' },
-	{ name:'NewsMax TV', category:'news', source:'https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8', site:'http://www.newsmaxtv.com' },
-	
-	// Music
-	{ name:'1HD', category:'music', source:'https://cdn-01.bonus-tv.ru:8090/1HDmusic/tracks-v2a1/index.m3u8', site:'http://1hd.ru/video.php' },
-	{ name:'Arirang Radio', category:'music', source:'http://amdlive.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8', site:'http://www.arirang.com/player/onair_radio.asp' },
-	{ name:'Beatz HD', category:'music', source:'https://livevideo.infomaniak.com/streaming/livecast/beats_1/playlist.m3u8', site:'http://www.radiopilatus.ch/livecenter/2' },
-	{ name:'Capital TV', category:'music', source:'http://ooyalahd2-f.akamaihd.net/i/globalradio01_delivery@156521/master.m3u8', site:'http://www.capitalfm.com/tv/' },
-	{ name:'DJing', category:'music', source:'http://www.djing.com/tv/live.m3u8', site:'http://www.djing.com/?channel=live' },
-	{ name:'DJing Animation', category:'music', source:'http://www.djing.com/tv/a-05.m3u8', site:'http://www.djing.com/?channel=animation' },
-	{ name:'DJing Classic', category:'music', source:'http://www.djing.com/tv/i-05.m3u8', site:'http://www.djing.com/?channel=classics' },
-	{ name:'DJing Ibiza', category:'music', source:'http://www.djing.com/tv/d-05.m3u8', site:'http://www.djing.com/?channel=ibiza' },
-	{ name:'DJing Underground', category:'music', source:'http://www.djing.com/tv/u-05.m3u8', site:'http://www.djing.com/?channel=underground' },
-	{ name:'Heart TV', category:'music', source:'http://ooyalahd2-f.akamaihd.net/i/globalradio02_delivery@156522/master.m3u8', site:'http://www.heart.co.uk/tv/player/' },
-	{ name:'Kronehit TV', category:'music', source:'http://bitcdn-kronehit-live.bitmovin.com/hls/1500k/bitcodin.m3u8', site:'http://www.kronehit.at/alles-ueber-kronehit/tv/' },
-	{ name:'PowerTurk TV', category:'music', source:'http://powertv.cdnturk.com/powertv/powerturktv.smil/playlist.m3u8', site:'http://www.powerapp.com.tr/tv/powerTurkTV' },
-	{ name:'SLAM!TV', category:'music', source:'https://hls.slam.nl/streaming/hls/SLAM!/playlist.m3u8', site:'https://live.slam.nl/slam-webcam/' },
-	
-	// Politics
-	{ name:'C-SPAN', category:'politics', source:'http://cspan1-lh.akamaihd.net/i/cspan1_1@304727/master.m3u8', site:'https://www.c-span.org/networks/?channel=c-span' },
-	{ name:'C-SPAN2', category:'politics', source:'http://cspan2-lh.akamaihd.net/i/cspan2_1@304728/master.m3u8', site:'https://www.c-span.org/networks/?channel=c-span-2' },
-	{ name:'C-SPAN3', category:'politics', source:'http://cspan3-lh.akamaihd.net/i/cspan3_1@304729/master.m3u8', site:'https://www.c-span.org/networks/?channel=c-span-3' },
-	
-	// Entertainment
-	{ name:'NBC Golf', category:'entertainment', source:'http://tvegolf-i.akamaihd.net/hls/live/218225/golfx/4296k/prog.m3u8', site:'http://www.golfchannel.com/liveextra/' },
-	{ name:'Insight TV', category:'entertainment', source:'http://ooyalahd2-f.akamaihd.net/i/intv02_delivery@346464/master.m3u8', site:'https://www.insight.tv/' },
-	{ name:'Red Bull TV', category:'entertainment', source:'https://rbtvdiglinear-i.akamaihd.net/hls/live/241719/ATfallback/master.m3u8', site:'https://www.redbull.tv/tv' },
-	
-	// Regional
-	{ name:'Arirang Korea', category:'network', source:'http://amdlive.ctnd.com.edgesuite.net/arirang_4ch/smil:arirang_4ch.smil/playlist.m3u8', site:'http://www.arirang.com/player/onair_tv.asp?Channel=CH_K' },
-	{ name:'Arirang UN', category:'network', source:'http://amdlive.ctnd.com.edgesuite.net/arirang_2ch/smil:arirang_2ch.smil/playlist.m3u8', site:'http://www.arirang.com/player/onair_tv.asp?Channel=CH_Z' },
-	{ name:'Arirang World', category:'network', source:'http://amdlive.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8', site:'http://www.arirang.com/player/onair_tv.asp?Channel=CH_W' },
-	{ name:'BYU TV', category:'network', source:'https://byubhls-i.akamaihd.net/hls/live/267187/byutvhls/master.m3u8', site:'http://www.byutv.org/watch/livetv' },
-	{ name:'NHK World', category:'network', source:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', site:'http://www3.nhk.or.jp/nhkworld/en/live/' },
-	
-	// Non-English
-	{ name:'La Sexta', category:'non-english', source:'http://a3live-lh.akamaihd.net/i/lasexta_1@35272/master.m3u8', site:'http://www.lasexta.com/' },
-	{ name:'L!FE', category:'non-english', source:'http://tv.life.ru/lifetv/720p/index.m3u8', site:'https://life.ru/streams' },
-	{ name:'L!FE 78', category:'non-english', source:'http://tv78.life.ru/lifetv/720p/index.m3u8', site:'https://life.ru/streams' },
-	{ name:'TRT1', category:'non-english', source:'http://trtcanlitv-lh.akamaihd.net/i/TRT1HD_1@181842/master.m3u8', site:'http://www.trt.net.tr/anasayfa/canli.aspx?y=tv&k=trt1' },
-];
+// JSON state file with checked channels
+var channelStateFile = 'channels/channels.json';
+
+// Channels array will be populated from JSON state file
+var channels = [];
 
 var player = null;
 var channelNumber = 0;
-var maxChannel = channels.length - 1;
+var maxChannel = 0;
+var playInterval = null;
 
-onload = function() {
-	player = bitmovin.player("player");
-	player.setup({
-		key: "5f4cbc75-4ee8-42de-857e-24f493a1e338",
-		playback: { autoplay: true, muted: false, },
-		cast: { enable: true }
-	}).then(function(value) {
-		console.log("Successfully created bitmovin player instance");
-	}, function(reason) {
-		console.log("Error while creating bitmovin player instance");
-	});
-	setTimeout(function () {
-		$(".bitmovinplayer-container").css("position", "");
-		$("#bmpui-id-139").remove();
-		setChannel(channelNumber);
-	}, 500);
-	
-	// Check for fullscreen
-	setInterval(function() {
-		if (document.webkitIsFullScreen) {
-			$('.bitmovinplayer-container').css({"top": "0", "left": "0", "transform": "none"});
+// Channel number input
+var typedChannelNumber = '';
+var channelInputTimeout = null;
+
+// Load last watched channel from localStorage
+function getLastChannel() {
+	try {
+		var saved = localStorage.getItem('lastChannel');
+		return saved ? parseInt(saved) : 0;
+	} catch (e) {
+		return 0;
+	}
+}
+
+// Save current channel to localStorage
+function saveLastChannel(chNum) {
+	try {
+		localStorage.setItem('lastChannel', chNum.toString());
+	} catch (e) {
+		// Ignore errors (private browsing, etc.)
+	}
+}
+
+// Channel Search
+var searchActive = false;
+var searchSelectedIndex = 0;
+var searchResults = [];
+
+function fuzzySearch(query) {
+	if (!query || query.length === 0) {
+		return [];
+	}
+
+	query = query.toLowerCase();
+	var results = [];
+
+	channels.forEach(function(channel, index) {
+		var name = channel.name.toLowerCase();
+		var category = (channel.category || '').toLowerCase();
+
+		// Score the match
+		var score = 0;
+
+		// Exact match gets highest score
+		if (name === query) {
+			score = 1000;
 		}
+		// Starts with query
+		else if (name.startsWith(query)) {
+			score = 500;
+		}
+		// Contains query
+		else if (name.indexOf(query) !== -1) {
+			score = 100;
+		}
+		// Fuzzy match - check if all characters appear in order
 		else {
-			$('.bitmovinplayer-container').css({"position": "absolute", "top": "50%", "left": "50%", "transform": "translateX(-50%) translateY(-50%)", "max-height": "100vh"});
+			var nameIndex = 0;
+			var matched = true;
+			for (var i = 0; i < query.length; i++) {
+				var charIndex = name.indexOf(query[i], nameIndex);
+				if (charIndex === -1) {
+					matched = false;
+					break;
+				}
+				nameIndex = charIndex + 1;
+			}
+			if (matched) {
+				score = 50;
+			}
 		}
-	}, 25);
+
+		// Also check category
+		if (category.indexOf(query) !== -1) {
+			score += 25;
+		}
+
+		if (score > 0) {
+			results.push({
+				channel: channel,
+				index: index,
+				score: score
+			});
+		}
+	});
+
+	// Sort by score descending
+	results.sort(function(a, b) {
+		return b.score - a.score;
+	});
+
+	return results.slice(0, 20); // Return top 20 results
+}
+
+function openSearch() {
+	searchActive = true;
+	searchSelectedIndex = 0;
+	searchResults = [];
+
+	$('#channel-search').show();
+	$('#search-input').val('').focus();
+	$('#search-results').html('');
+}
+
+function closeSearch() {
+	searchActive = false;
+	$('#channel-search').hide();
+	$('#search-input').val('');
+	$('#search-results').html('');
+}
+
+function updateSearchResults() {
+	var query = $('#search-input').val();
+	searchResults = fuzzySearch(query);
+	searchSelectedIndex = 0;
+
+	var resultsHtml = '';
+
+	if (searchResults.length === 0 && query.length > 0) {
+		resultsHtml = '<div class="no-results">No channels found</div>';
+	} else {
+		searchResults.forEach(function(result, idx) {
+			var selectedClass = idx === searchSelectedIndex ? 'selected' : '';
+			resultsHtml += '<div class="search-result-item ' + selectedClass + '" data-index="' + idx + '">' +
+				'<span class="search-result-number">#' + result.index + '</span>' +
+				'<div class="search-result-name">' + result.channel.name + '</div>' +
+				'<div class="search-result-category">' + (result.channel.category || 'Other') + '</div>' +
+			'</div>';
+		});
+	}
+
+	$('#search-results').html(resultsHtml);
+
+	// Add click handlers
+	$('.search-result-item').click(function() {
+		var idx = parseInt($(this).attr('data-index'));
+		selectSearchResult(idx);
+	});
+}
+
+function selectSearchResult(idx) {
+	if (idx >= 0 && idx < searchResults.length) {
+		var channelIndex = searchResults[idx].index;
+		closeSearch();
+		setChannel(channelIndex);
+	}
+}
+
+function moveSearchSelection(direction) {
+	if (searchResults.length === 0) return;
+
+	searchSelectedIndex += direction;
+	if (searchSelectedIndex < 0) {
+		searchSelectedIndex = searchResults.length - 1;
+	} else if (searchSelectedIndex >= searchResults.length) {
+		searchSelectedIndex = 0;
+	}
+
+	// Update UI
+	$('.search-result-item').removeClass('selected');
+	$('.search-result-item').eq(searchSelectedIndex).addClass('selected');
+
+	// Scroll into view
+	var selectedElem = $('.search-result-item').eq(searchSelectedIndex);
+	if (selectedElem.length) {
+		selectedElem[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+	}
+}
+
+// Load channels from JSON state file
+function loadChannels(callback) {
+	var allChannels = [];
+
+	// Load channels from JSON state file
+	fetch(channelStateFile)
+		.then(function(response) {
+			if (!response.ok) {
+				throw new Error('Failed to load channel state file');
+			}
+			return response.json();
+		})
+		.then(function(state) {
+			console.log('Loaded channel state file');
+			console.log('Success channels available:', state.success.length);
+
+			// Convert successful channels to our format
+			state.success.forEach(function(channel) {
+				// Use final_url if redirect occurred, otherwise use url
+				var streamUrl = channel.final_url || channel.url;
+
+				allChannels.push({
+					name: channel.name,
+					category: channel.category || 'Other',
+					source: streamUrl,
+					logo: channel.logo || '',
+					site: '',
+					redirected: channel.redirected || false
+				});
+			});
+
+			callback(allChannels);
+		})
+		.catch(function(error) {
+			console.error('Error loading channel state file:', error);
+			callback(allChannels);
+		});
+}
+
+// Initialize player
+function initPlayer() {
+	player = videojs('player', {
+		autoplay: true,
+		muted: true,
+		controls: true,
+		fluid: false,
+		fill: true,
+		liveui: true,
+		responsive: false
+	});
+
+	player.ready(function() {
+		console.log("Successfully created Video.js player instance");
+		setChannel(channelNumber);
+	});
+}
+
+// Load channels on page load
+onload = function() {
+	console.log("Loading channels from JSON state file...");
+	loadChannels(function(loadedChannels) {
+		channels = loadedChannels;
+		maxChannel = channels.length - 1;
+		console.log("Loaded " + channels.length + " channels");
+
+		if (channels.length === 0) {
+			console.error("No channels loaded!");
+			return;
+		}
+
+		// Restore last watched channel
+		var lastChannel = getLastChannel();
+		if (lastChannel >= 0 && lastChannel <= maxChannel) {
+			channelNumber = lastChannel;
+			console.log("Resuming from channel " + channelNumber);
+		} else {
+			channelNumber = 0;
+		}
+
+		initPlayer();
+
+		// Initialize search
+		$('#search-input').on('input', function() {
+			updateSearchResults();
+		});
+	});
 };
 
 Element.prototype.remove = function () {
@@ -81,25 +271,48 @@ Element.prototype.remove = function () {
 };
 
 function playStream(hlsSource) {
-	player.load({ hls: hlsSource });
-	var playInterval = setInterval(function() {
-		if (player.isReady() && !player.isStalled() && !player.isPlaying()) {
-			clearInterval(playInterval);
-			player.play();
-		}
-	}, 100);
+	// Clear any existing play interval from previous stream
+	if (playInterval) {
+		clearInterval(playInterval);
+		playInterval = null;
+	}
+
+	if (player) {
+		// Set new source - autoplay is enabled so it will play automatically
+		player.src({
+			src: hlsSource,
+			type: 'application/x-mpegURL'
+		});
+	}
 };
 			
 function setChannel(chNum)
 {
+	if (chNum < 0 || chNum >= channels.length) {
+		console.error("Invalid channel number: " + chNum);
+		return;
+	}
+
 	var channel = channels[chNum];
+	if (!channel) {
+		console.error("Channel " + chNum + " not found");
+		return;
+	}
+
 	channelNumber = chNum;
-	$.doTimeout("#channel-text"); // cancel channel number fadeout
-	$("#channel-text").stop(true, true).fadeTo(0, 1).show(); // reshow channel number
 	load(channelNumber);
-	
+
+	// Save to localStorage
+	saveLastChannel(channelNumber);
+
+	// Update and show channel text
 	$('#channel-text').html(channelNumber + ' - ' + channel.name);
-	$.doTimeout("#channel-text", 3000, function(){ $("#channel-text").fadeOut(500); }); // fade channel number out after 3 seconds
+	$('#channel-text').css('opacity', '1');
+
+	// Fade out after 3 seconds (but still visible on hover)
+	setTimeout(function() {
+		$('#channel-text').css('opacity', '0');
+	}, 3000);
 }
 
 function channelUp()
@@ -121,15 +334,118 @@ function channelDown()
 function load(chNum)
 {
 	var channel = channels[chNum];
-	
-	
+
+	if (!channel) {
+		console.error("Channel " + chNum + " not found");
+		return;
+	}
+
 	playStream(channel.source);
 }
 
 document.onkeydown = function(evt)
 {
 	evt = evt || window.event;
-	
+
+	// Handle search mode
+	if (searchActive) {
+		if (evt.keyCode == 27) { // ESC
+			closeSearch();
+			return false;
+		}
+		else if (evt.keyCode == 38) { // Up arrow
+			moveSearchSelection(-1);
+			return false;
+		}
+		else if (evt.keyCode == 40) { // Down arrow
+			moveSearchSelection(1);
+			return false;
+		}
+		else if (evt.keyCode == 13) { // Enter
+			selectSearchResult(searchSelectedIndex);
+			return false;
+		}
+		// Let other keys pass through to the input field
+		return;
+	}
+
+	// Open search with '/' or 's'
+	if (evt.keyCode == 191 || evt.keyCode == 83) { // '/' or 's'
+		openSearch();
+		return false;
+	}
+
+	// Handle number keys (0-9) for direct channel entry
+	if ((evt.keyCode >= 48 && evt.keyCode <= 57) || (evt.keyCode >= 96 && evt.keyCode <= 105))
+	{
+		// Get the digit (works for both main keyboard and numpad)
+		var digit = evt.keyCode >= 96 ? (evt.keyCode - 96).toString() : String.fromCharCode(evt.keyCode);
+
+		// Add digit to typed channel number
+		typedChannelNumber += digit;
+
+		// Show the typed number in channel text
+		$('#channel-text').html('Channel: ' + typedChannelNumber).css('opacity', '1');
+
+		// Clear existing timeout
+		if (channelInputTimeout) {
+			clearTimeout(channelInputTimeout);
+		}
+
+		// Set timeout to switch channel after 2 seconds of no input
+		channelInputTimeout = setTimeout(function() {
+			var targetChannel = parseInt(typedChannelNumber);
+			if (targetChannel >= 0 && targetChannel <= maxChannel) {
+				setChannel(targetChannel);
+			} else {
+				// Invalid channel, show error briefly
+				$('#channel-text').html('Invalid channel: ' + typedChannelNumber);
+				setTimeout(function() {
+					$('#channel-text').html(channelNumber + ' - ' + channels[channelNumber].name).css('opacity', '0');
+				}, 1500);
+			}
+			typedChannelNumber = '';
+		}, 2000);
+
+		return false;
+	}
+
+	// Handle Enter key to navigate immediately
+	if (evt.keyCode == 13) // Enter
+	{
+		if (typedChannelNumber !== '') {
+			// Clear timeout
+			if (channelInputTimeout) {
+				clearTimeout(channelInputTimeout);
+				channelInputTimeout = null;
+			}
+
+			// Navigate to channel immediately
+			var targetChannel = parseInt(typedChannelNumber);
+			if (targetChannel >= 0 && targetChannel <= maxChannel) {
+				setChannel(targetChannel);
+			} else {
+				// Invalid channel, show error briefly
+				$('#channel-text').html('Invalid channel: ' + typedChannelNumber);
+				setTimeout(function() {
+					$('#channel-text').html(channelNumber + ' - ' + channels[channelNumber].name).css('opacity', '0');
+				}, 1500);
+			}
+			typedChannelNumber = '';
+			return false;
+		}
+	}
+
+	// Clear typed channel number if any other key is pressed
+	if (typedChannelNumber !== '') {
+		typedChannelNumber = '';
+		if (channelInputTimeout) {
+			clearTimeout(channelInputTimeout);
+			channelInputTimeout = null;
+		}
+		$('#channel-text').html(channelNumber + ' - ' + channels[channelNumber].name).css('opacity', '0');
+	}
+
 	if (evt.keyCode == 38) // up arrow
 	{
 		channelUp();
@@ -142,23 +458,12 @@ document.onkeydown = function(evt)
 	}
 	if (evt.keyCode == 32) // space
 	{
-		var playerType = $('body').data('player-type');
-		if (playerType == 'video')
-		{
-			var player = $('#stream-player')[0];
-			if (player.paused)
+		if (player) {
+			if (player.paused()) {
 				player.play();
-			else
+			} else {
 				player.pause();
-		}
-		else if (playerType == 'yt')
-		{
-			var player = $('body').data('yt-player');
-			var state = player.getPlayerState();
-			if (state == 1 || state == 3)
-				player.pauseVideo();
-			else
-				player.playVideo();
+			}
 		}
 		return false;
 	}
