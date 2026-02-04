@@ -8,6 +8,7 @@ var player = null;
 var channelNumber = 187;
 var maxChannel = -1;
 var playInterval = null;
+var isHandlingError = false;
 
 // Channel number input
 var typedChannelNumber = '';
@@ -233,6 +234,40 @@ function initPlayer() {
 		console.log("Successfully created Video.js player instance");
 		setChannel(channelNumber);
 	});
+
+	// Handle player errors to prevent channel switching from breaking
+	player.on('error', function() {
+		// Prevent error handler from running repeatedly
+		if (isHandlingError) {
+			return;
+		}
+
+		var error = player.error();
+		if (error) {
+			isHandlingError = true;
+			console.error('Video.js error:', error.code, error.message);
+
+			// Show channel name in upper left without error text
+			var channel = channels[channelNumber];
+			$('#channel-text').html(channelNumber + ' - ' + (channel ? channel.name : 'Unknown')).css('opacity', '1');
+
+			// Show error overlay
+			$('#error-channel-name').html('Channel ' + channelNumber + ': ' + (channel ? channel.name : 'Unknown'));
+			$('#error-overlay').addClass('show');
+
+			// Clear the error state to allow switching to other channels
+			setTimeout(function() {
+				if (player) {
+					// Clear the error state
+					player.error(null);
+					// Reset flag after a delay to allow new channel loads
+					setTimeout(function() {
+						isHandlingError = false;
+					}, 500);
+				}
+			}, 100);
+		}
+	});
 }
 
 // Load channels on page load
@@ -278,11 +313,28 @@ function playStream(hlsSource) {
 	}
 
 	if (player) {
+		// Hide error overlay when switching channels
+		$('#error-overlay').removeClass('show');
+
+		// Reset error handling flag for new stream
+		isHandlingError = false;
+
+		// Clear any previous error state before loading new stream
+		if (player.error()) {
+			player.error(null);
+		}
+
+		// Reset the player to ensure clean state
+		player.reset();
+
 		// Set new source - autoplay is enabled so it will play automatically
 		player.src({
 			src: hlsSource,
 			type: 'application/x-mpegURL'
 		});
+
+		// Load the new source
+		player.load();
 	}
 };
 			

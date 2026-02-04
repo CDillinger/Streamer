@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
 		<link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
@@ -10,6 +11,16 @@
 	<body>
 		<video id="player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto"></video>
 		<div class="channel-info"><h1 class="hover" id="channel-text"></h1></div>
+
+		<!-- Error overlay for broken streams -->
+		<div id="error-overlay">
+			<div class="error-message">
+				<div class="error-icon">⚠</div>
+				<div class="error-title">Stream Unavailable</div>
+				<div class="error-detail" id="error-channel-name"></div>
+				<div class="error-hint">Use ↑/↓ arrows or type a channel number to switch</div>
+			</div>
+		</div>
 
 		<!-- Channel Search -->
 		<div id="channel-search" class="search-container" style="display: none;">
