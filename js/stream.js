@@ -227,12 +227,40 @@ function initPlayer() {
 		fluid: false,
 		fill: true,
 		liveui: true,
-		responsive: false
+		responsive: false,
+		html5: {
+			vhs: {
+				// Prevent seeking backwards by limiting goal buffer length
+				overrideNative: true,
+				// Start playback closer to the live edge
+				liveRangeSafeTimeDelta: 3,
+				// Reduce the target duration for live streams
+				experimentalBufferBasedABR: true
+			}
+		},
+		liveTracker: {
+			// How often to track position relative to live edge (in seconds)
+			trackingThreshold: 30,
+			// How close to live edge before we consider ourselves "live" (in seconds)
+			liveTolerance: 15
+		}
 	});
 
 	player.ready(function() {
 		console.log("Successfully created Video.js player instance");
 		setChannel(channelNumber);
+	});
+
+	// Prevent backward seeks during playback (helps reduce stuttering)
+	var lastPlaybackPosition = 0;
+	player.on('timeupdate', function() {
+		var currentTime = player.currentTime();
+		// If we jumped backward more than 0.3 seconds (but not a legitimate user seek)
+		if (!player.seeking() && currentTime < lastPlaybackPosition - 0.3) {
+			console.log('Preventing backward jump from', lastPlaybackPosition, 'to', currentTime);
+			player.currentTime(lastPlaybackPosition);
+		}
+		lastPlaybackPosition = currentTime;
 	});
 
 	// Handle player errors to prevent channel switching from breaking

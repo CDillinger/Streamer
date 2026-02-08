@@ -86,8 +86,9 @@ class ChannelChecker:
                 group_match = re.search(r'group-title="([^"]+)"', line)
                 current_channel['category'] = group_match.group(1) if group_match else 'Unknown'
 
-                # Extract display name (text after last comma)
-                name_match = re.search(r',(.+)$', line)
+                # Extract display name (text after the comma following the last quoted attribute)
+                # This ensures we skip commas inside attribute values
+                name_match = re.search(r'"\s*,\s*(.+)$', line)
                 current_channel['name'] = name_match.group(1).strip() if name_match else 'Unknown'
 
             # Parse stream URL

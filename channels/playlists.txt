@@ -18,3 +18,7 @@
 - https://www.apsattv.com/hp.m3u (35)
 - https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/roku_all.m3u (348)
 - https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/tubi_all.m3u (174)
+- https://www.apsattv.com/freelivesports.m3u (100)
+- https://www.apsattv.com/igocast.m3u (25)
+- https://www.apsattv.com/localnow.m3u (434)
+- https://www.apsattv.com/vidaa.m3u (814)
