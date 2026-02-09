@@ -59,6 +59,29 @@ h1, h2, h3, h4, h5, h6, p
 	left: 0;
 	padding: 20px;
 	z-index: 1000;
+	min-width: 400px;
+	min-height: 150px;
+}
+
+.channel-logo-container
+{
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+}
+
+#channel-logo
+{
+	display: block;
+	max-width: 200px;
+	max-height: 80px;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
 }
 
 #channel-text
@@ -74,18 +97,13 @@ h1, h2, h3, h4, h5, h6, p
 /* Show channel name when hovering near top left */
 .channel-info:hover #channel-text
 {
-	opacity: 1;
+	opacity: 1 !important;
 }
 
-/* Create a larger hover area */
-.channel-info::before
+/* Show logo when hovering near top right */
+.channel-logo-container:hover #channel-logo
 {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 300px;
-	height: 100px;
+	opacity: 1 !important;
 }
 
 /* Channel Search */
@@ -141,12 +159,30 @@ h1, h2, h3, h4, h5, h6, p
 	margin-bottom: 5px;
 	color: #fff;
 	transition: background 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	position: relative;
 }
 
 .search-result-item:hover,
 .search-result-item.selected
 {
 	background: #333;
+}
+
+.search-result-logo
+{
+	width: 80px;
+	height: 40px;
+	object-fit: contain;
+	flex-shrink: 0;
+}
+
+.search-result-content
+{
+	flex: 1;
+	min-width: 0;
 }
 
 .search-result-name
@@ -164,7 +200,9 @@ h1, h2, h3, h4, h5, h6, p
 
 .search-result-number
 {
-	float: right;
+	position: absolute;
+	right: 15px;
+	top: 10px;
 	color: #666;
 	font-size: 14px;
 }
@@ -202,6 +240,26 @@ h1, h2, h3, h4, h5, h6, p
 }
 
 #error-overlay.show
+{
+	display: flex;
+}
+
+/* No channels error overlay */
+#no-channels-error
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.95);
+	align-items: center;
+	justify-content: center;
+	z-index: 2000;
+	display: none;
+}
+
+#no-channels-error.show
 {
 	display: flex;
 }
@@ -250,6 +308,14 @@ h1, h2, h3, h4, h5, h6, p
 	font-size: 16px;
 	color: #ccc;
 	margin-bottom: 10px;
+	line-height: 1.6;
+}
+
+.error-detail code
+{
+	font-family: monospace;
+	font-size: 14px;
+	color: #4af;
 }
 
 .error-hint

@@ -14,6 +14,9 @@ var isHandlingError = false;
 var typedChannelNumber = '';
 var channelInputTimeout = null;
 
+// Channel info display timeout
+var channelInfoTimeout = null;
+
 // Load last watched channel from localStorage
 function getLastChannel() {
 	try {
@@ -133,10 +136,17 @@ function updateSearchResults() {
 	} else {
 		searchResults.forEach(function(result, idx) {
 			var selectedClass = idx === searchSelectedIndex ? 'selected' : '';
+			var logoHtml = '';
+			if (result.channel.logo && result.channel.logo.trim() !== '') {
+				logoHtml = '<img class="search-result-logo" src="' + result.channel.logo + '" alt="' + result.channel.name + ' logo" />';
+			}
 			resultsHtml += '<div class="search-result-item ' + selectedClass + '" data-index="' + idx + '">' +
 				'<span class="search-result-number">#' + result.index + '</span>' +
-				'<div class="search-result-name">' + result.channel.name + '</div>' +
-				'<div class="search-result-category">' + (result.channel.category || 'Other') + '</div>' +
+				logoHtml +
+				'<div class="search-result-content">' +
+					'<div class="search-result-name">' + result.channel.name + '</div>' +
+					'<div class="search-result-category">' + (result.channel.category || 'Other') + '</div>' +
+				'</div>' +
 			'</div>';
 		});
 	}
@@ -214,6 +224,20 @@ function loadChannels(callback) {
 		})
 		.catch(function(error) {
 			console.error('Error loading channel state file:', error);
+
+			// Check if this is a file:// protocol issue
+			if (window.location.protocol === 'file:') {
+				$('#no-channels-error .error-title').text('Web Server Required');
+				$('#no-channels-error .error-detail').html(
+					'This app must be run from a web server, not opened directly as a file.<br><br>' +
+					'To run the server, open a terminal in this directory and run:<br>' +
+					'<code style="background: #222; padding: 10px; display: block; margin-top: 10px; border-radius: 4px;">python3 -m http.server 8000</code><br>' +
+					'Then open <a href="http://localhost:8000" style="color: #4af; text-decoration: underline;">http://localhost:8000</a> in your browser.'
+				);
+				$('#no-channels-error .error-hint').text('Error: ' + error.message);
+				$('#no-channels-error').addClass('show');
+			}
+
 			callback(allChannels);
 		});
 }
@@ -308,6 +332,8 @@ onload = function() {
 
 		if (channels.length === 0) {
 			console.error("No channels loaded!");
+			// Show prominent error message to user
+			$('#no-channels-error').addClass('show');
 			return;
 		}
 
@@ -385,13 +411,46 @@ function setChannel(chNum)
 	// Save to localStorage
 	saveLastChannel(channelNumber);
 
-	// Update and show channel text
+	// Update document title
+	document.title = channel.name + ' - Streamer';
+
+	// Update and show channel text immediately
 	$('#channel-text').html(channelNumber + ' - ' + channel.name);
 	$('#channel-text').css('opacity', '1');
 
+	// Update and show channel logo if available
+	var $logo = $('#channel-logo');
+
+	// Always clear the old logo first
+	$logo.attr('src', '');
+	$logo.css('opacity', '0');
+
+	if (channel.logo && channel.logo.trim() !== '') {
+		// Set new logo source
+		$logo.attr('src', channel.logo);
+		$logo.attr('alt', channel.name + ' logo');
+		$logo.show();
+
+		// Show new logo once it's loaded (use .one() to avoid multiple handlers)
+		$logo.one('load', function() {
+			$logo.css('opacity', '1');
+		});
+	} else {
+		$logo.hide();
+	}
+
+	// Clear any existing timeout
+	if (channelInfoTimeout) {
+		clearTimeout(channelInfoTimeout);
+	}
+
 	// Fade out after 3 seconds (but still visible on hover)
-	setTimeout(function() {
+	channelInfoTimeout = setTimeout(function() {
 		$('#channel-text').css('opacity', '0');
+		if (channel.logo && channel.logo.trim() !== '') {
+			$logo.css('opacity', '0');
+		}
+		channelInfoTimeout = null;
 	}, 3000);
 }
 
