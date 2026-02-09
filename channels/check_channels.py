@@ -44,6 +44,38 @@ class ChannelChecker:
         cleaned_name = re.sub(pattern, '', name)
         return cleaned_name.strip() if cleaned_name else name
 
+    def strip_platform_suffixes(self, name: str) -> str:
+        """Remove known platform/region suffixes from channel name.
+
+        Examples:
+            'Sportsgrid (GEO)' -> 'Sportsgrid'
+            'Newsworld -TCL' -> 'Newsworld'
+            'wedo movies (GB)' -> 'wedo movies'
+            'Sony One | Comedy HITS (DRM)' -> 'Sony One | Comedy HITS'
+        """
+        # Specific list of known suffixes to remove
+        suffixes_to_remove = [
+            # Geographic/Regional
+            r'\s*\(GEO\)',
+            r'\s*\(Geo\)',
+            r'\s*\(GEO USA\)',
+            r'\s*\(Geo USA\)',
+            # Platforms
+            r'\s+-TCL',
+            r'\s*\(DRM\)',
+            # Country codes (only common ones that appear as suffixes)
+            r'\s*\(GB\)',
+            r'\s*\(IT\)',
+            r'\s*\(US\)',
+            r'\s*\(USA\)',
+        ]
+
+        cleaned_name = name
+        for suffix_pattern in suffixes_to_remove:
+            cleaned_name = re.sub(suffix_pattern + r'\s*$', '', cleaned_name, flags=re.IGNORECASE)
+
+        return cleaned_name.strip() if cleaned_name else name
+
     def save_state(self):
         """Save current state to JSON file."""
         self.state['last_updated'] = datetime.now().isoformat()
@@ -89,7 +121,12 @@ class ChannelChecker:
                 # Extract display name (text after the comma following the last quoted attribute)
                 # This ensures we skip commas inside attribute values
                 name_match = re.search(r'"\s*,\s*(.+)$', line)
-                current_channel['name'] = name_match.group(1).strip() if name_match else 'Unknown'
+                if name_match:
+                    raw_name = name_match.group(1).strip()
+                    # Strip platform/region suffixes like (GEO), -TCL, etc.
+                    current_channel['name'] = self.strip_platform_suffixes(raw_name)
+                else:
+                    current_channel['name'] = 'Unknown'
 
             # Parse stream URL
             elif current_channel and (line.startswith('http://') or line.startswith('https://')):
@@ -121,12 +158,13 @@ class ChannelChecker:
         return False
 
     def find_channel_by_name(self, name: str) -> Optional[Dict]:
-        """Find an existing channel by name in the state."""
+        """Find an existing channel by name in the state (case-insensitive)."""
+        name_lower = name.lower()
         for channel in self.state['success']:
-            if channel.get('name') == name:
+            if channel.get('name', '').lower() == name_lower:
                 return channel
         for channel in self.state['failed']:
-            if channel.get('name') == name:
+            if channel.get('name', '').lower() == name_lower:
                 return channel
         return None
 
@@ -371,27 +409,56 @@ class ChannelChecker:
             existing_channel = self.find_channel_by_name(channel['name'])
 
             if existing_channel:
-                # Add as alias to existing channel
-                if 'aliases' not in existing_channel:
-                    existing_channel['aliases'] = []
+                # Special case: existing channel failed, but new one succeeds
+                # Promote the failed entry to success with the working stream
+                if existing_channel['status'] == 'failed' and result['status'] == 'success':
+                    # Initialize aliases if needed
+                    if 'aliases' not in existing_channel:
+                        existing_channel['aliases'] = []
 
-                alias_info = {
-                    'url': result['url'],
-                    'source_playlist': result.get('source_playlist'),
-                    'checked_at': result.get('checked_at'),
-                    'status': result.get('status')
-                }
+                    # Move the old (failed) URL to aliases
+                    failed_alias = {
+                        'url': existing_channel['url'],
+                        'source_playlist': existing_channel.get('source_playlist'),
+                        'checked_at': existing_channel.get('checked_at'),
+                        'status': 'failed',
+                        'reason': existing_channel.get('reason'),
+                        'details': existing_channel.get('details')
+                    }
+                    existing_channel['aliases'].append(failed_alias)
 
-                # Include additional details if this alias failed or has different characteristics
-                if result['status'] == 'failed':
-                    alias_info['reason'] = result.get('reason')
-                    alias_info['details'] = result.get('details')
+                    # Remove from failed list
+                    self.state['failed'].remove(existing_channel)
+
+                    # Update with successful stream data
+                    existing_channel.update(result)
+
+                    # Add to success list
+                    self.state['success'].append(existing_channel)
+
+                    print(f"  ✓ PROMOTED - Failed channel now has working stream!")
                 else:
-                    alias_info['http_status'] = result.get('http_status')
-                    alias_info['cors_header'] = result.get('cors_header')
+                    # Standard case: add as alias to existing channel
+                    if 'aliases' not in existing_channel:
+                        existing_channel['aliases'] = []
 
-                existing_channel['aliases'].append(alias_info)
-                print(f"  ⟳ DUPLICATE NAME - Added as alias to existing channel")
+                    alias_info = {
+                        'url': result['url'],
+                        'source_playlist': result.get('source_playlist'),
+                        'checked_at': result.get('checked_at'),
+                        'status': result.get('status')
+                    }
+
+                    # Include additional details if this alias failed or has different characteristics
+                    if result['status'] == 'failed':
+                        alias_info['reason'] = result.get('reason')
+                        alias_info['details'] = result.get('details')
+                    else:
+                        alias_info['http_status'] = result.get('http_status')
+                        alias_info['cors_header'] = result.get('cors_header')
+
+                    existing_channel['aliases'].append(alias_info)
+                    print(f"  ⟳ DUPLICATE NAME - Added as alias to existing channel")
             else:
                 # Add as new channel entry
                 if result['status'] == 'success':
