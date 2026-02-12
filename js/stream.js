@@ -17,20 +17,19 @@ var channelInputTimeout = null;
 // Channel info display timeout
 var channelInfoTimeout = null;
 
-// Load last watched channel from localStorage
+// Load last watched channel name from localStorage
 function getLastChannel() {
 	try {
-		var saved = localStorage.getItem('lastChannel');
-		return saved ? parseInt(saved) : 0;
+		return localStorage.getItem('lastChannel') || null;
 	} catch (e) {
-		return 0;
+		return null;
 	}
 }
 
-// Save current channel to localStorage
-function saveLastChannel(chNum) {
+// Save current channel name to localStorage
+function saveLastChannel(chName) {
 	try {
-		localStorage.setItem('lastChannel', chNum.toString());
+		localStorage.setItem('lastChannel', chName);
 	} catch (e) {
 		// Ignore errors (private browsing, etc.)
 	}
@@ -337,11 +336,14 @@ onload = function() {
 			return;
 		}
 
-		// Restore last watched channel
-		var lastChannel = getLastChannel();
-		if (lastChannel >= 0 && lastChannel <= maxChannel) {
-			channelNumber = lastChannel;
-			console.log("Resuming from channel " + channelNumber);
+		// Restore last watched channel by name
+		var lastChannelName = getLastChannel();
+		var lastChannelIndex = lastChannelName
+			? channels.findIndex(function(ch) { return ch.name === lastChannelName; })
+			: -1;
+		if (lastChannelIndex >= 0) {
+			channelNumber = lastChannelIndex;
+			console.log("Resuming from channel " + channelNumber + " (" + lastChannelName + ")");
 		} else {
 			channelNumber = 0;
 		}
@@ -409,7 +411,7 @@ function setChannel(chNum)
 	load(channelNumber);
 
 	// Save to localStorage
-	saveLastChannel(channelNumber);
+	saveLastChannel(channel.name);
 
 	// Update document title
 	document.title = channel.name + ' - Streamer';
